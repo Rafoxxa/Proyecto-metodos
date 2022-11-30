@@ -1,0 +1,86 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{amssymb}
+\pagestyle{empty}
+\usepackage{mathtools}
+\usepackage{makeidx}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{%
+		\node[shape=circle,fill=blue!20,draw,inner sep=2pt] (char) {#1};}}
+\usepackage{enumitem}
+\definecolor{royalblue(traditional)}{rgb}{0.0, 0.14, 0.4}
+\usepackage[left=2.00cm, right=2.00cm, top=1.00cm, bottom=2.00cm]{geometry}
+\begin{document}
+	\begin{center}
+		\large{\textbf{Formulación variacional de FitzHugh - Nagumo y el problema de minimización efectivo}}
+	\end{center}
+\vskip0.5cm
+  Sea $\Omega \subseteq \mathbb{R}^{2}$ un dominio acotado con frontera poligonal $\Sigma$ y $T>0$ el tiempo final. Considere $\Omega_{T}=\Omega \times [0,T]$, $v=v(x,t)$ y $w=(x,t)$; para todo $(x,t) \in \Omega_{T}$. Tenemos que $v$ corresponde al potencial transmembranal escalar y $w$ es la variable interna que controla la recuperación de la célula. Se definen las ecuaciones de FitzHugh - Nagumo de reacción - difusión no local mediante el sistema:
+\begin{equation*}
+	\left\{
+	\begin{array}{ll}
+		\dfrac{\partial v}{\partial t}-D \Delta v+I_{\text{ion}}(v,w) =I_{\text{app}}(x,t), \\
+		\dfrac{\partial w}{\partial t}=H(v,w),\\
+		\\
+		D\Delta v\cdot \mathbf{n}=0, \quad (x,t) \in \Sigma_{T},\\
+				\\
+		v(x,0)=v_{0}(x),\\
+		w(x,0)=w_0(x).
+	\end{array}
+	\right. 
+\end{equation*}
+donde $D>0$ es la tasa de difusión (dependiente del potencial transmembranal),  $I_{\text{app}}(x,t)$ es el estímulo e $I_{\text{ion}}(v,w) $ es la corriente iónica definida por la función $  I_{\text{ion}}:\Omega_{T}\times \Omega_{T} \to  \Omega_{T} $:
+\begin{align*}
+	I_{\text{ion}}(v,w)&=I_{\text{ion,1}}(v)+ I_{\text{ion,2}}(w),\\
+	&=-\lambda v(v-\theta)(1-v)+\lambda w.
+\end{align*}
+Además $H: \Omega_{T} \times  \Omega_{T} \to  \Omega_{T}$ con $H(v,w):=av-bw$; en donde $\lambda, a,b \in \mathbb{R}^{+}$ y $\theta \in \mathbb{R}$ (parámetro umbral para la activación eléctrica) son valores fijos. Enfatizaremos de que $I_{\text{ion,1}}, I_{\text{ion,2}}$ y $H$ son funciones continuas en su dominio. 
+\vskip0.2cm
+\noindent En lo que sigue, consideraremos la integración temporal de las ecuaciones de FitzHugh - Nagumo en el intervalo de tiempo $[0,T]$ utilizando una discretización temporal de Backward - Euler con paso de tiempo $\Delta t=\frac{T}{N}$. De esta manera, se obtienen las ecuaciones semidiscretas:
+\begin{equation}\label{Eq1}
+		\left\{
+	\begin{array}{ll}
+		\dfrac{v_{n+1}-v_{n}}{\Delta t}-D \Delta v_{n+1}+I_{\text{ion}}(v_{n+1},w_{n+1}) =I_{\text{app}}(x,t_{n+1}), \\
+	\dfrac{w_{n+1}-w_{n}}{\Delta t}=H(v_{n+1},w_{n+1}).
+	\end{array}
+\right.
+\end{equation}
+con $n=\left\lbrace 1,2,...,N\right\rbrace $ y $t_{n}=n\Delta t$. La formulación variacional de las ecuaciones semidiscretas (1) está dada por:
+\begin{equation*}\label{Eq2}
+	\left\{
+	\begin{array}{ll}
+		\displaystyle\int_{\Omega_{T}}	\dfrac{v-v_{n}}{\Delta t}\varphi \, + D\displaystyle\int_{\Omega_{T}} \nabla v \cdot \nabla \varphi  +	\displaystyle\int_{\Omega_{T}} I_{\text{ion}}(v,w)\varphi\, =	\displaystyle\int_{\Omega_{T}}	I_{\text{app}}(x,t)\varphi, \\
+		\\
+			\displaystyle\int_{\Omega_{T}}	\dfrac{w-w_{n}}{\Delta t}\psi  =	\displaystyle\int_{\Omega_{T}}	H(v,w)\psi,
+	\end{array}
+	\right.
+\end{equation*}
+en donde $\varphi \in  H^{1}(\Omega)$ y $\psi \in C([0,T],L^{2}(\Omega))$.
+\newpage
+\noindent Es de nuestro interés, analizar el comportamiento de las ecuaciones semidiscretas dadas por $(\ref{Eq1})$ como problema de minimización efectivo. Sin embargo, debemos considerar algunos resultados preliminares. 
+\vskip0.2cm
+\noindent Por temas de notación, diremos que $\frac{\partial v}{\partial t}=\dot{v}$ y $ \frac{\partial w}{\partial t}=\dot{w}$. Definimos el potencial de tasa como:
+\begin{center}
+	$\Psi\left[ \dot{v},\dot{w}\right] :=\displaystyle\int_{\Omega} \left( \dfrac{1}{2}\dot{v}^{2}-\dfrac{1}{2}\dot{r}^{2}\right)\, dx $,
+\end{center}
+El potencial electroquímico generalizado está dado por:
+\begin{center}
+	$\Upsilon\left[ v,w\right] :=\displaystyle\int_{\Omega} \left[ \dfrac{D}{2}\left| \nabla v \right|^{2}+\lambda \left(\dfrac{v^{4}}{4}-\dfrac{(\alpha+1)v^{3}}{3}+\dfrac{\alpha v^{2}}{2} \right) +avw-\dfrac{b}{2}r^{2} \right] \, dx$.
+\end{center}
+Si $\Delta t<\dfrac{3}{\lambda (\theta^{2}-\theta+1)},$ entonces las ecuaciones semidiscretas de FitzHugh - Nagumo dadas en (1) admiten una única solución débil $(v_{n+1},w_{n+1})$ determinada por las relaciones:
+\begin{align*}
+	F_{n}[\Psi_{n+1}] &= \min_{\Psi \in H_{1}(\Omega)} F_{n}[\Psi],\\
+	r_{n+1}&=\frac{r_{n}+\Delta t av_{n+1}}{1+b\Delta t},
+\end{align*}
+en donde $F_{n}[\Psi_{n}]$ es un funcional estrictamente convexo definido por:
+\begin{center}
+	$ F_{n}[\Psi_{n}]:=\displaystyle\int_{\Omega} \left[ \dfrac{D}{2}\left| \nabla v \right|^{2}+f_{n}(v(x),x) \right] \, dx $,
+\end{center}
+en donde {\footnotesize $f_{n}(v,x)=\displaystyle\max_{r \in \mathbb{R}^{2}}\left\lbrace \Delta t \left( \dfrac{1}{2}\left(\dfrac{v-v_{n}}{\Delta t} \right)^{2}-\dfrac{1}{2}\left(\dfrac{w-w_{n}}{\Delta t} \right)^{2}\right)+ \lambda \left(\dfrac{v^{4}}{4}-\dfrac{(\alpha+1)v^{3}}{3}+\dfrac{\alpha v^{2}}{2} \right) +avw-\dfrac{b}{2}r^{2}\right\rbrace $}.
+\end{document}
